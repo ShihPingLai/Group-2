@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 #set initial condition(m,s)
 x=8371000 #radius of earth
 y=1000000.
-v=7000
+v=70000
 g=9.8
 angle0=60
 e_r0=6371000
@@ -48,6 +48,9 @@ while r>=e_r0:
     x_lst.append(x)
     y_lst.append(y)
     r_lst.append(r)
+    #consider the mothod go away
+    if r>(10*e_r0):
+        break
 
 #I just want to draw a circle    
 cx_lst=[]
