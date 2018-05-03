@@ -3,12 +3,12 @@ import math
 from matplotlib import pyplot as plt
 
 #set initial condition(m,s)
-x=6371000 #radius of earth
-y=0.
+x=8371000 #radius of earth
+y=1000000.
 v=7000
 g=9.8
 angle0=60
-
+e_r0=6371000
 #in x,y represent
 r=(x**2+y**2)**0.5
 pro_deg= np.deg2rad(angle0)
@@ -30,7 +30,7 @@ r_lst=[r0]
 #caculate the state next 0.1sec
 t=0
 dt=0.1
-while r>=r0:
+while r>=e_r0:
     #we must consider gravity in radial direction, using theta
     r=(x**2+y**2)**0.5
     cos_theta= x/r
@@ -53,8 +53,8 @@ while r>=r0:
 cx_lst=[]
 cy_lst=[]
 for i in range(200):
-    cx = 6371000*math.cos(6.29*i/200)
-    cy = 6371000*math.sin(6.29*i/200)
+    cx = e_r0*math.cos(6.29*i/200)
+    cy = e_r0*math.sin(6.29*i/200)
     cx_lst.append(cx)
     cy_lst.append(cy)
 
