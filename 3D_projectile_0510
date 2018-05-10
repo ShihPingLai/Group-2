@@ -47,9 +47,9 @@ r_lst=[r0]
 #==========plot the earth============= 
 U = np.linspace(0, 2 * np.pi, 100)  
 V = np.linspace(0, np.pi, 100)  
-X = 6371000* np.outer(np.cos(U), np.sin(V))  
-Y = 6371000* np.outer(np.sin(U), np.sin(V))  
-Z = 6371000* np.outer(np.ones(np.size(U)), np.cos(V))  
+X = e_r0* np.outer(np.cos(U), np.sin(V))  
+Y = e_r0* np.outer(np.sin(U), np.sin(V))  
+Z = e_r0* np.outer(np.ones(np.size(U)), np.cos(V))  
   
 #==========x,y,z range=============  
 plt.ylim(-10000000, 10000000)
@@ -106,8 +106,8 @@ while r>=e_r0:
     if r>(10*e_r0):
         break
 #===============ploting figure===============
-ax.plot([x0], [y0], [z0], markerfacecolor='w', markeredgecolor='w', marker='o', markersize=20, alpha=0.8)
-ax.plot([x], [y], [z], markerfacecolor='r', markeredgecolor='r', marker='X', markersize=20, alpha=0.8)
+ax.plot([x0], [y0], [z0], markerfacecolor='w', markeredgecolor='w', marker='o', markersize=5, alpha=0.8)
+ax.plot([x], [y], [z], markerfacecolor='r', markeredgecolor='r', marker='X', markersize=15, alpha=0.8)
 ax.set_title('PATH SIMULATION',size=40)
 ax.set_xlabel('x(m)',size=15)
 ax.set_ylabel('y(m)',size=15)
@@ -120,6 +120,6 @@ plt.show()
 print "INFORMATION(SI unit)" 
 print "Launching Position:(",int(x0),",",int(y0),',',int(z0),")" ,"[white dot]" 
 print "Launching speed:", int(v0), "m/s" 
-print "launching Angle:", "θ:",int(theta0), "°",",","φ:",int(phi0) , "°"
+print "launching Angle:", "(θ:",int(theta0), "°",",","φ:",int(phi0) , "°)"
 print "Time Require:", int(t), "sec" 
 print "Landing Position:(",int(x),",",int(y),",",int(z),")" ,"[red cross]"
