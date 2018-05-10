@@ -9,16 +9,17 @@ ax = fig.gca(projection='3d')
 
 
 #==========set initial condition=============
+t=0
 g=9.8
 #LAUNCHING POSITION
 x=0 
 y=0
 z=6372000
 #LAUNCHING SPEED
-v=9000
+v=7500
 #LAUNCHING ANGLE
 theta0=45
-phi0=90
+phi0=45
 #RADIUS OF EARTH
 e_r0=6371000
 
@@ -38,11 +39,13 @@ z0=z
 v0=v
 g0=g
 r0=r
+t0=t
 #lists record position
 x_lst=[x0]
 y_lst=[y0]
 z_lst=[z0]
 r_lst=[r0]
+t_lst=[t0]
 
 #==========plot the earth============= 
 U = np.linspace(0, 2 * np.pi, 100)  
@@ -57,7 +60,6 @@ plt.xlim(-10000000, 10000000)
 ax.set_zlim(-10000000, 10000000)
 
 #==========SAMEPLING TIME INTERVAL=============
-t=0
 dt=0.1
 
 #==========caculation of parameters=============
@@ -100,11 +102,14 @@ while r>=e_r0:
     x_lst.append(x)
     y_lst.append(y)
     z_lst.append(z)
+    t_lst.append(t)
     r_lst.append(r)
     #consider when go far away
     
     if r>(10*e_r0):
         break
+        
+datas=zip(x_lst,y_lst,z_lst,t_lst) 
 #===============ploting figure===============
 ax.plot([x0], [y0], [z0], markerfacecolor='w', markeredgecolor='w', marker='o', markersize=5, alpha=0.8)
 ax.plot([x], [y], [z], markerfacecolor='r', markeredgecolor='r', marker='X', markersize=15, alpha=0.8)
