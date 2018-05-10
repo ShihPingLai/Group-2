@@ -7,32 +7,22 @@ mpl.rcParams['legend.fontsize'] = 100
 fig = plt.figure(figsize=(10,10))  
 ax = fig.gca(projection='3d') 
 
-# Make data  
-U = np.linspace(0, 2 * np.pi, 100)  
-V = np.linspace(0, np.pi, 100)  
-X = 6371000* np.outer(np.cos(U), np.sin(V))  
-Y = 6371000* np.outer(np.sin(U), np.sin(V))  
-Z = 6371000* np.outer(np.ones(np.size(U)), np.cos(V))  
-  
-# Plot the surface  
-plt.ylim(-10000000, 10000000)
-plt.xlim(-10000000, 10000000) 
-ax.set_zlim(-10000000, 10000000)
 
-
-
-
-#============================================
-#set initial condition(m,s)
-x=0 #radius of earth
+#==========set initial condition=============
+g=9.8
+#LAUNCHING POSITION
+x=0 
 y=0
 z=6372000
+#LAUNCHING SPEED
 v=9000
-g=9.8
+#LAUNCHING ANGLE
 theta0=45
 phi0=90
+#RADIUS OF EARTH
 e_r0=6371000
-#in x,y represent
+
+#==========in x,y,z represent velocity=============
 r=(x**2+y**2+z**2)**0.5
 phi0_deg= np.deg2rad(phi0)
 theta0_deg=np.deg2rad(theta0)
@@ -40,6 +30,7 @@ vx=v*math.sin(theta0_deg)*math.cos(phi0_deg)
 vy=v*math.sin(theta0_deg)*math.sin(phi0_deg)
 vz=v*math.cos(theta0_deg)
 
+#==========some data recording=============
 #record initial condition
 x0=x
 y0=y
@@ -47,16 +38,29 @@ z0=z
 v0=v
 g0=g
 r0=r
-
 #lists record position
 x_lst=[x0]
 y_lst=[y0]
 z_lst=[z0]
 r_lst=[r0]
 
-#caculate the state next 0.1sec
+#==========plot the earth============= 
+U = np.linspace(0, 2 * np.pi, 100)  
+V = np.linspace(0, np.pi, 100)  
+X = 6371000* np.outer(np.cos(U), np.sin(V))  
+Y = 6371000* np.outer(np.sin(U), np.sin(V))  
+Z = 6371000* np.outer(np.ones(np.size(U)), np.cos(V))  
+  
+#==========x,y,z range=============  
+plt.ylim(-10000000, 10000000)
+plt.xlim(-10000000, 10000000) 
+ax.set_zlim(-10000000, 10000000)
+
+#==========SAMEPLING TIME INTERVAL=============
 t=0
 dt=0.1
+
+#==========caculation of parameters=============
 while r>=e_r0:
     #we must consider gravity in radial direction, using theta
     r=(x**2+y**2+z**2)**0.5
@@ -68,6 +72,7 @@ while r>=e_r0:
     else:
       cos_phi= x/(r*sin_theta)
       sin_phi= y/(r*sin_theta)
+    #set almost zero to absoluely zero    
     def zero(a):
         if abs(a)<10**-18 :
           a=0
@@ -79,9 +84,9 @@ while r>=e_r0:
     gy=-g0*((r0**2)/(r**2))*sin_theta*sin_phi
     gz=-g0*((r0**2)/(r**2))*cos_theta
    
-    #gx=zero(gx)
-    #gy=zero(gy)
-    #gz=zero(gz)
+    gx=zero(gx)
+    gy=zero(gy)
+    gz=zero(gz)
     #then we try to caculate
     
     vx += gx*dt
@@ -96,17 +101,21 @@ while r>=e_r0:
     y_lst.append(y)
     z_lst.append(z)
     r_lst.append(r)
-    #consider the mothod go away
+    #consider when go far away
     
     if r>(10*e_r0):
         break
-#============================================
-
+#===============ploting figure===============
+ax.set_title('PATH SIMULATION',size=40)
+ax.set_xlabel('x(m)',size=15)
+ax.set_ylabel('y(m)',size=15)
+ax.set_zlabel('z(m)',size=15)
 ax.plot(x_lst, y_lst, z_lst, label='parametric curve')  
 ax.plot_surface(X, Y, Z, color='b')   
 plt.show()  
 
-print "INFORMATION" 
+
+print "INFORMATION(SI unit)" 
 print "Launching Position:(",int(x0),",",int(y0),',',int(z0),")"  
 print "Launching speed:", int(v0), "m/s" 
 print "launching Angle:", "θ:",int(theta0), "°",",","φ:",int(phi0) , "°"
