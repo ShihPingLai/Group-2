@@ -106,6 +106,8 @@ while r>=e_r0:
     if r>(10*e_r0):
         break
 #===============ploting figure===============
+ax.plot([x0], [y0], [z0], markerfacecolor='w', markeredgecolor='w', marker='o', markersize=20, alpha=0.8)
+ax.plot([x], [y], [z], markerfacecolor='r', markeredgecolor='r', marker='X', markersize=20, alpha=0.8)
 ax.set_title('PATH SIMULATION',size=40)
 ax.set_xlabel('x(m)',size=15)
 ax.set_ylabel('y(m)',size=15)
@@ -116,8 +118,8 @@ plt.show()
 
 
 print "INFORMATION(SI unit)" 
-print "Launching Position:(",int(x0),",",int(y0),',',int(z0),")"  
+print "Launching Position:(",int(x0),",",int(y0),',',int(z0),")" ,"[white dot]" 
 print "Launching speed:", int(v0), "m/s" 
 print "launching Angle:", "θ:",int(theta0), "°",",","φ:",int(phi0) , "°"
 print "Time Require:", int(t), "sec" 
-print "Landing Position:(",int(x),",",int(y),",",int(z),")" 
+print "Landing Position:(",int(x),",",int(y),",",int(z),")" ,"[red cross]"
