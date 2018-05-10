@@ -1,23 +1,49 @@
-import numpy as np
-import math
-from matplotlib import pyplot as plt
+import matplotlib as mpl  
+from mpl_toolkits.mplot3d import Axes3D  
+import numpy as np  
+import matplotlib.pyplot as plt  
+import math  
+mpl.rcParams['legend.fontsize'] = 100  
+fig = plt.figure(figsize=(10,10))  
+ax = fig.gca(projection='3d') 
 
+# Make data  
+U = np.linspace(0, 2 * np.pi, 100)  
+V = np.linspace(0, np.pi, 100)  
+X = 6371000* np.outer(np.cos(U), np.sin(V))  
+Y = 6371000* np.outer(np.sin(U), np.sin(V))  
+Z = 6371000* np.outer(np.ones(np.size(U)), np.cos(V))  
+  
+# Plot the surface  
+plt.ylim(-10000000, 10000000)
+plt.xlim(-10000000, 10000000) 
+ax.set_zlim(-10000000, 10000000)
+
+
+
+
+#============================================
 #set initial condition(m,s)
-x=8371000 #radius of earth
-y=1000000.
-v=70000
+x=0 #radius of earth
+y=0
+z=6372000
+v=9000
 g=9.8
-angle0=60
+theta0=45
+phi0=90
 e_r0=6371000
 #in x,y represent
-r=(x**2+y**2)**0.5
-pro_deg= np.deg2rad(angle0)
-vx=v*math.cos(pro_deg)
-vy=v*math.sin(pro_deg)
+r=(x**2+y**2+z**2)**0.5
+phi0_deg= np.deg2rad(phi0)
+theta0_deg=np.deg2rad(theta0)
+vx=v*math.sin(theta0_deg)*math.cos(phi0_deg)
+vy=v*math.sin(theta0_deg)*math.sin(phi0_deg)
+vz=v*math.cos(theta0_deg)
 
 #record initial condition
 x0=x
 y0=y
+z0=z
 v0=v
 g0=g
 r0=r
@@ -25,6 +51,7 @@ r0=r
 #lists record position
 x_lst=[x0]
 y_lst=[y0]
+z_lst=[z0]
 r_lst=[r0]
 
 #caculate the state next 0.1sec
@@ -32,46 +59,56 @@ t=0
 dt=0.1
 while r>=e_r0:
     #we must consider gravity in radial direction, using theta
-    r=(x**2+y**2)**0.5
-    cos_theta= x/r
-    sin_theta= y/r
-    gx=-g0*((r0**2)/(r**2))*cos_theta
-    gy=-g0*((r0**2)/(r**2))*sin_theta
-    
+    r=(x**2+y**2+z**2)**0.5
+    cos_theta=z/r
+    sin_theta=((x**2+y**2)**0.5)/r
+    if sin_theta ==0:
+      cos_phi=0
+      sin_phi=0
+    else:
+      cos_phi= x/(r*sin_theta)
+      sin_phi= y/(r*sin_theta)
+    def zero(a):
+        if abs(a)<10**-18 :
+          a=0
+        else:
+          a=a
+        return a
+        
+    gx=-g0*((r0**2)/(r**2))*sin_theta*cos_phi
+    gy=-g0*((r0**2)/(r**2))*sin_theta*sin_phi
+    gz=-g0*((r0**2)/(r**2))*cos_theta
+   
+    #gx=zero(gx)
+    #gy=zero(gy)
+    #gz=zero(gz)
     #then we try to caculate
+    
     vx += gx*dt
     vy += gy*dt
+    vz += gz*dt
     x  += vx*dt
     y  += vy*dt
+    z  += vz*dt
     t  += dt
     #record position in lists
     x_lst.append(x)
     y_lst.append(y)
+    z_lst.append(z)
     r_lst.append(r)
     #consider the mothod go away
+    
     if r>(10*e_r0):
         break
+#============================================
 
-#I just want to draw a circle    
-cx_lst=[]
-cy_lst=[]
-for i in range(200):
-    cx = e_r0*math.cos(6.29*i/200)
-    cy = e_r0*math.sin(6.29*i/200)
-    cx_lst.append(cx)
-    cy_lst.append(cy)
+ax.plot(x_lst, y_lst, z_lst, label='parametric curve')  
+ax.plot_surface(X, Y, Z, color='b')   
+plt.show()  
 
-#simply plot   
-plt.figure(figsize=(10, 10))
-plt.ylim(-15000000, 15000000)
-plt.xlim(-15000000, 15000000)
-plt.plot(cx_lst,cy_lst)
-plt.plot(x_lst,y_lst)
-plt.show()      
-
-print "INFORMATION"
-print "Launching Position:(",int(x0),",",int(y0),")" 
-print "Launching speed:", int(v0), "m/s"
-print "launching Angle:", int(angle0), "degree"
-print "Time Require:", int(t), "sec"
-print "Landing Position:(",int(x),",",int(y),")"
+print "INFORMATION" 
+print "Launching Position:(",int(x0),",",int(y0),',',int(z0),")"  
+print "Launching speed:", int(v0), "m/s" 
+print "launching Angle:", "θ:",int(theta0), "°",",","φ:",int(phi0) , "°"
+print "Time Require:", int(t), "sec" 
+print "Landing Position:(",int(x),",",int(y),",",int(z),")" 
