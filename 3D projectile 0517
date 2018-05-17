@@ -117,7 +117,7 @@ while r>=e_r0:
 datas=zip(x_lst,y_lst,z_lst,t_lst)
 
 #===============import facecolors===============
-bm = PIL.Image.open('bluemarble_.jpg')
+bm = PIL.Image.open('bluemarble_new.jpg')
 bm = np.array(bm.resize([d/10 for d in bm.size]))/256.
 lons = np.linspace(-180, 180, bm.shape[1]) * np.pi/180 
 lats = np.linspace(-90, 90, bm.shape[0])[::-1] * np.pi/180 
