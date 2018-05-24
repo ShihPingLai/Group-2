@@ -120,6 +120,8 @@ def update(frame):
     # Each ring is made larger
     #S += (size_max - size_min) / n
 
+# Reset ring specific ring (relative to frame number)
+i = frame % 19789
 P[i] = np.array([x_lst[100*i], y_lst[100*i]])
     #S[i] = size_min
     #C[i, 3] = 1
