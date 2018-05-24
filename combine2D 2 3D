@@ -1,0 +1,210 @@
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+import PIL
+
+mpl.rcParams['legend.fontsize'] = 100
+fig = plt.figure(figsize=(10, 10))
+ax = fig.gca(projection='3d')
+
+# ==========set initial condition=============
+t = 0
+g = 9.8
+# LAUNCHING POSITION
+x = 0
+y = 0
+z = 6372000
+# LAUNCHING SPEED
+v = 7500
+# LAUNCHING ANGLE
+theta0 = 45
+phi0 = 45
+# RADIUS OF EARTH
+e_r0 = 6371000
+# OBSERVING ANGLE
+observe_theta = 45
+observe_phi = 60
+
+# ==========in x,y,z represent velocity=============
+r = (x ** 2 + y ** 2 + z ** 2) ** 0.5
+phi0_deg = np.deg2rad(phi0)
+theta0_deg = np.deg2rad(theta0)
+vx = v * math.sin(theta0_deg) * math.cos(phi0_deg)
+vy = v * math.sin(theta0_deg) * math.sin(phi0_deg)
+vz = v * math.cos(theta0_deg)
+
+# ==========some data recording=============
+# record initial condition
+x0 = x
+y0 = y
+z0 = z
+v0 = v
+g0 = g
+r0 = r
+t0 = t
+# lists record position
+x_lst = [x0 / 1000000]
+y_lst = [y0 / 1000000]
+z_lst = [z0 / 1000000]
+r_lst = [r0 / 1000000]
+t_lst = [t0]
+observe_theta = 90 - observe_theta
+# ==========plot the earth=============
+U = np.linspace(0, 2 * np.pi, 100)
+V = np.linspace(0, np.pi, 100)
+X = (e_r0 / 1000000) * np.outer(np.cos(U), np.sin(V)).T
+Y = (e_r0 / 1000000) * np.outer(np.sin(U), np.sin(V)).T
+Z = (e_r0 / 1000000) * np.outer(np.ones(np.size(U)), np.cos(V)).T
+
+# ==========x,y,z range=============
+plt.ylim(-10, 10)
+plt.xlim(-10, 10)
+ax.set_zlim(-10, 10)
+
+# ==========SAMEPLING TIME INTERVAL=============
+dt = 0.1
+
+# ==========caculation of parameters=============
+while r >= e_r0:
+    # we must consider gravity in radial direction, using theta
+    r = (x ** 2 + y ** 2 + z ** 2) ** 0.5
+    cos_theta = z / r
+    sin_theta = ((x ** 2 + y ** 2) ** 0.5) / r
+    if sin_theta == 0:
+        cos_phi = 0
+        sin_phi = 0
+    else:
+        cos_phi = x / (r * sin_theta)
+        sin_phi = y / (r * sin_theta)
+
+
+    # set almost zero to absoluely zero
+    def zero(a):
+        if abs(a) < 10 ** -18:
+            a = 0
+        else:
+            a = a
+        return a
+
+
+    gx = -g0 * ((r0 ** 2) / (r ** 2)) * sin_theta * cos_phi
+    gy = -g0 * ((r0 ** 2) / (r ** 2)) * sin_theta * sin_phi
+    gz = -g0 * ((r0 ** 2) / (r ** 2)) * cos_theta
+
+    gx = zero(gx)
+    gy = zero(gy)
+    gz = zero(gz)
+    # then we try to caculate
+
+    vx += gx * dt
+    vy += gy * dt
+    vz += gz * dt
+    x += vx * dt
+    y += vy * dt
+    z += vz * dt
+    t += dt
+    # record position in lists
+    x_lst.append(x / 1000000)
+    y_lst.append(y / 1000000)
+    z_lst.append(z / 1000000)
+    t_lst.append(t)
+    r_lst.append(r / 1000000)
+    # consider when go far away
+
+    if r > (10 * e_r0):
+        break
+
+datas = zip(x_lst, y_lst, z_lst, t_lst)
+
+# ===============import facecolors===============
+bm = PIL.Image.open('bluemarble_new.jpg')
+bm = np.array(bm.resize([d / 10 for d in bm.size])) / 256.
+lons = np.linspace(-180, 180, bm.shape[1]) * np.pi / 180
+lats = np.linspace(-90, 90, bm.shape[0])[::-1] * np.pi / 180
+
+# ===============ploting figure===============
+ax.plot([x0 / 1000000], [y0 / 1000000], [z0 / 1000000], markerfacecolor='w', markeredgecolor='w', marker='o',
+        markersize=5, alpha=0.8)
+ax.plot([x / 1000000], [y / 1000000], [z / 1000000], markerfacecolor='r', markeredgecolor='r', marker='X',
+        markersize=15, alpha=0.8)
+ax.set_title('PROJECTION SIMULATE', size=40)
+ax.set_xlabel('X axis(1000km)', size=15)
+ax.set_ylabel('Y axis(1000km)', size=15)
+ax.set_zlabel('Z axis(1000km)', size=15)
+ax.plot(x_lst, y_lst, z_lst, label='parametric curve')
+ax.plot_surface(X, Y, Z, facecolors=bm)
+ax.view_init(observe_theta, observe_phi)
+plt.show()
+
+print
+"INFORMATION(SI unit)"
+print
+"Launching Position:(", int(x0), ",", int(y0), ',', int(z0), ")", "[white dot]"
+print
+"Launching speed:", int(v0), "m/s"
+print
+"launching Angle:", "(θ:", int(theta0), "°", ",", "φ:", int(phi0), "°)"
+print
+"Time Require:", int(t), "sec"
+print
+"Landing Position:(", int(x), ",", int(y), ",", int(z), ")", "[red cross]"
+
+# New figure with white background
+fig = plt.figure(figsize=(6, 6), facecolor='white')
+
+# New axis over the whole figure, no frame and a 1:1 aspect ratio
+ax = fig.add_axes([0, 0, 1, 1], frameon=False, aspect=1)
+
+# Number of ring
+n = 50
+size_min = 10
+size_max = 50 * 50
+
+# Ring position
+P = np.empty([19789, 2])
+
+# Ring colors
+C = np.ones((n, 4)) * (0, 0, 0, 1)
+# Alpha color channel goes from 0 (transparent) to 1 (opaque)
+C[:, 3] = np.linspace(0, 1, n)
+
+# Ring sizes
+S = np.linspace(size_min, size_max, n)
+
+# Scatter plot
+scat = ax.scatter(P[:, 0], P[:, 1])
+
+# Ensure limits are [0,1] and remove ticks
+ax.set_xlim(-15000000, 15000000), ax.set_xticks([])
+ax.set_ylim(-15000000, 15000000), ax.set_yticks([])
+
+
+def update(frame):
+    global P, C, S, x_lst, y_lst,z_lst
+
+    # Every ring is made more transparent
+    #C[:, 3] = np.maximum(0, C[:, 3] - 1.0 / n)
+
+    # Each ring is made larger
+    #S += (size_max - size_min) / n
+
+    # Reset ring specific ring (relative to frame number)
+    i = frame % 19789
+    P[i] = np.array([x_lst[100*i], y_lst[100*i]],z_lst[100*i])
+    #S[i] = size_min
+    #C[i, 3] = 1
+
+    # Update scatter object
+    #scat.set_edgecolors(C)
+    #scat.set_sizes(S)
+    scat.set_offsets(P)
+
+    # Return the modified object
+    return scat,
+
+
+animation = FuncAnimation(fig, update, interval=0.000000000001, blit=True, frames=197)
+# animation.save('rain.gif', writer='imagemagick', fps=30, dpi=40)
+plt.show()
