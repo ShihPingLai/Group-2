@@ -120,9 +120,7 @@ def update(frame):
     # Each ring is made larger
     #S += (size_max - size_min) / n
 
-    # Reset ring specific ring (relative to frame number)
-    i = frame % 19789
-    P[i] = np.array([x_lst[i], y_lst[i]])
+P[i] = np.array([x_lst[100*i], y_lst[100*i]])
     #S[i] = size_min
     #C[i, 3] = 1
 
@@ -135,6 +133,6 @@ def update(frame):
     return scat,
 
 
-animation = FuncAnimation(fig, update, interval=0.000000000001, blit=True, frames=19789)
+animation = FuncAnimation(fig, update, interval=0.000000000001, blit=True, frames=197)
 # animation.save('rain.gif', writer='imagemagick', fps=30, dpi=40)
 plt.show()
