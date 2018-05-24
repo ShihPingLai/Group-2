@@ -26,7 +26,7 @@ phi0=45
 e_r0=6371000
 #OBSERVING ANGLE
 observe_theta=45
-observe_phi=60
+observe_phi=45
 #RADIUS OF IRON BALL
 rb=1
 #DENSITY OF AIR
@@ -74,7 +74,7 @@ ax.set_zlim(-10, 10)
 
 #==========SAMEPLING TIME INTERVAL=============
 dt=0.1
-engine_functional_time=300
+engine_functional_time=500
 #==========caculation of parameters=============
 while r>=e_r0:
     #we must consider gravity in radial direction, using theta
@@ -103,9 +103,9 @@ while r>=e_r0:
     gy=zero(gy)
     gz=zero(gz)
     #caculate the influnce of air resistance
-    Fdx=0.5*0.5*D*(vx**2)*Ab
-    Fdy=0.5*0.5*D*(vy**2)*Ab
-    Fdz=0.5*0.5*D*(vz**2)*Ab
+    Fdx=0.5*0.5*D*(vx**2)*Ab*np.sign(vx)
+    Fdy=0.5*0.5*D*(vy**2)*Ab*np.sign(vy)
+    Fdz=0.5*0.5*D*(vz**2)*Ab*np.sign(vz)
     aFdx=Fdx/mb
     aFdy=Fdy/mb
     aFdz=Fdz/mb
@@ -138,7 +138,6 @@ while r>=e_r0:
       rf=r
       tf=t
     #consider when go far away
-    #print az_en
     if r>(10*e_r0):
         break
         
