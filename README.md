@@ -26,16 +26,15 @@
 程式使用方法：
 [繪圖與計算部分]
 1. 下載bluemarble_new.jpg到目標資料夾
-2. 使用3D projectile 0517之程式碼可得到簡單拋射的結果
-使用Extra_with_air-resistance之程式碼則得到考慮空氣阻力及外加推進力的結果
-3. 程式中"#"後面的文字敘述若為大寫英文則為可調動之參數(皆為SI制)，包含:
-(a)#LAUNCHING POSITIO發射位置(直角座標)
-(b)#LAUNCHING SPEED發射速度
-(c)#LAUNCHING ANGLE在直角座標上的發射角度
-(d)#RADIUS OF EARTH地球半徑
-(e)#OBSERVING ANGLE模擬圖之觀察角度
-(f)#RADIUS OF IRON BALL拋射物直徑(假設為球體)
-(g)#DENSITY OF AIR空氣密度
-(h)#FORCE SUPPLY BY ENGINE引擎推進力
-(i)#SAMEPLING TIME INTERVAL包含計算取樣時間間隔與引擎推進時間
-4. 完成輸入後即可啟動程式，兩程式分別可得到類似test_normal.jpg與test_resistance.jpg類似的結果   
+2. 使用3D projectile 0517之程式碼可得到簡單拋射的結果，使用Extra_with_air-resistance之程式碼則得到考慮空氣阻力及外加推進力的結果
+3. 程式中"#"後面的文字敘述若為大寫英文則為可調動之參數(皆為SI制)，包含 
+(a) #LAUNCHING POSITIO發射位置(直角座標) 
+(b) #LAUNCHING SPEED發射速度 
+(c) #LAUNCHING ANGLE在直角座標上的發射角度 
+(d) #RADIUS OF EARTH地球半徑 
+(e) #OBSERVING ANGLE模擬圖之觀察角度 
+(f) #RADIUS OF IRON BALL拋射物直徑(假設為球體) 
+(g) #DENSITY OF AIR空氣密度 
+(h) #FORCE SUPPLY BY ENGINE引擎推進力 
+(i) #SAMEPLING TIME INTERVAL包含計算取樣時間間隔與引擎推進時間 
+4. 完成輸入後即可啟動程式，兩程式分別可得到類似test_normal.jpg與test_resistance.jpg類似的結果    
