@@ -183,8 +183,9 @@ plt.show()
 print "INFORMATION(SI unit)" 
 print "Launching Position:(",int(x0),",",int(y0),',',int(z0),")" ,"[white dot]" 
 print "Launching speed:", int(v0), "m/s" 
+print "Engine power and time:" , int(F_engine/1000), "kN" , int(engine_functional_time), "sec" 
 print "launching Angle:", "(θ:",int(theta0), "°",",","φ:",int(phi0) , "°)"
-print "Time Require:", int(tf), "sec" 
+print "Time Require:", int(tf), "sec"
 print "Landing Position:(",int(xf),",",int(yf),",",int(zf),")" ,"[red cross]"
 
 
