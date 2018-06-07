@@ -14,7 +14,7 @@ ax = fig.gca(projection='3d')
 t=0
 g=9.8
 #SAMEPLING TIME INTERVAL
-dt=10
+dt=1
 #RADIUS OF EARTH
 e_r0=6371000
 #LAUNCHING POSITION
@@ -23,16 +23,16 @@ y=0
 z=6372000
 #OBSERVING ANGLE
 observe_theta=45
-observe_phi=45
+observe_phi=90
 
 #LAUNCHING SPEED
-v=0
+v=7500
 #LAUNCHING ANGLE
-theta0=45
+theta0=70
 phi0=45
 
 #============AIR RESISTANCE ADDED===========
-air_resistance = True
+air_resistance = False
 
 #RADIUS OF IRON BALL
 rb=1
@@ -42,10 +42,10 @@ D_ball=7.874
 D=1.297
 
 #==============ENGINE ADD==================
-engine_added = True
+engine_added = False
 
 F_engine=7000*1000
-engine_functional_time=500
+engine_functional_time=7500
 
 
 #==========in x,y,z represent velocity=============
